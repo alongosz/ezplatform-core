@@ -21,6 +21,14 @@ before_install:
 install:
     - travis_retry composer install --no-progress --no-interaction --no-suggest --prefer-dist
 
+matrix:
+    fast_finish: true
+    include:
+        - name: 'Code Style check'
+          php: '7.3'
+          script:
+              - composer fix-cs
+
 # reduce depth (history) of git checkout
 git:
     depth: 30
