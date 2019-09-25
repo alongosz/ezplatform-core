@@ -1,0 +1,26 @@
+language: php
+
+cache:
+    directories:
+        - $HOME/.composer/cache/files
+
+# test only master, stable branches and pull requests
+branches:
+    only:
+        - master
+        - /^\d.\d+$/
+
+before_install:
+    # Disable memory_limit for composer
+    - echo "memory_limit=-1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
+    # Disable XDebug for all jobs as we don't generate test coverge on travis
+    - phpenv config-rm xdebug.ini
+    # make sure we use UTF-8 encoding
+    - echo "default_charset=UTF-8" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
+
+install:
+    - travis_retry composer install --no-progress --no-interaction --no-suggest --prefer-dist
+
+# reduce depth (history) of git checkout
+git:
+    depth: 30
